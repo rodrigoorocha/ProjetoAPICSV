@@ -1,4 +1,5 @@
 import csv
+import uuid
 import random
 from datetime import datetime, timedelta
 
@@ -12,7 +13,7 @@ def GeradorCSV ():
     # Gerando os dados
     data = []
     for i in range(num_records):
-        item_id = i + 1
+        item_id = uuid.uuid4()
         name = f"Item_{chr(65 + (i % 26))}"  # Gera nomes como Item A, Item B, etc.
         value = round(random.uniform(5.0, 20.0), 2)  # Gera valores aleatórios
         date = (start_date + timedelta(days=i)).strftime('%Y-%m-%d')  # Incrementa a data

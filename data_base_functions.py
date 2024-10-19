@@ -11,8 +11,10 @@ def GeradorDB():
 
 def CarregarTabela(conexao,df):
     # Criar a tabela a partir do DataFrame
-    df.to_sql('produtos', conexao, if_exists='replace', index=False)
+    df.to_sql('produtos', conexao, if_exists='append', index=False)
     return "tabela carregada"
+
+
 
 def ListarProduto(conexao, id):
     query = f"select * from produtos WHERE id = {id}"
@@ -23,6 +25,7 @@ def ListarProduto(conexao, id):
     colunas = [desc[0] for desc in cursor.description]
     registro= [dict(zip(colunas, linha)) for linha in registro]
     registro = json.dumps(registro, indent=4)
+    
     return registro
     
 def ListarTodosProdutos(conexao):
