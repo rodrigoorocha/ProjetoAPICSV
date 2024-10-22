@@ -10,14 +10,72 @@ def GeradorDB():
 
 
 def CarregarTabela(conexao,df):
+   
     # Criar a tabela a partir do DataFrame
-    df.to_sql('produtos', conexao, if_exists='append', index=False)
+    df.to_sql('temp_produtos', conexao, if_exists='replace', index=False)
+    try:
+    
+        query_create_if_not_exist = f"""
+
+            CREATE TABLE IF NOT EXISTS produtos (
+                id INTEGER PRIMARY KEY,
+                name TEXT,
+                value FLOAT,
+                date DATE
+            );
+            """
+        
+        cursor = conexao.cursor()
+        cursor.execute(query_create_if_not_exist)
+        conexao.commit()
+    except Exception as e :
+        print(e)
+        print("tabela produto ja existe")    
+
+    query_insert = f""" 
+           INSERT INTO produtos
+            (
+                id,
+                name,
+                value,
+                date
+            )
+                SELECT 
+                    DESTINO.id,
+                    DESTINO.name,
+                    DESTINO.value,
+                    DESTINO.date
+                FROM produtos AS DESTINO
+                LEFT JOIN temp_produtos AS ORIGEM ON
+                    ORIGEM.id = DESTINO.id
+                WHERE ORIGEM.id IS NULL;
+            """
+    cursor = conexao.cursor()
+    cursor.execute(query_insert)
+    conexao.commit()
+
+
+    query_update = f""" 
+            UPDATE produtos
+            SET 
+                name = (SELECT temp.name FROM temp_produtos temp WHERE temp.id = produtos.id),
+                value = (SELECT temp.value FROM temp_produtos temp WHERE temp.id = produtos.id),
+                date = (SELECT temp.date FROM temp_produtos temp WHERE temp.id = produtos.id)
+            WHERE EXISTS (SELECT 1 FROM temp_produtos temp WHERE temp.id = produtos.id);
+                """
+    cursor = conexao.cursor()
+    cursor.execute(query_update)
+    conexao.commit()
+    
+
+
+
     return "tabela carregada"
 
 
 
 def ListarProduto(conexao, id):
-    query = f"select * from produtos WHERE id = {id}"
+    query = f"select * from produtos WHERE id = {id};"
     cursor = conexao.cursor()
     cursor.execute(query)
     registro = cursor.fetchall()
@@ -29,7 +87,7 @@ def ListarProduto(conexao, id):
     return registro
     
 def ListarTodosProdutos(conexao):
-    query = "select * from produtos"
+    query = "select * from produtos;"
     cursor = conexao.cursor()
     cursor.execute(query)
     registros = cursor.fetchall()

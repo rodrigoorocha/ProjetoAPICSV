@@ -9,7 +9,7 @@ conexao = GeradorDB()
 tabela = CarregarTabela(conexao, df)
 produtos = ListarTodosProdutos(conexao)
 #produto = ListarProduto(conexao, 2)
-print(produtos)
+#print(produtos)
 
 
 

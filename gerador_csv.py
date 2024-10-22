@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 def GeradorCSV ():
     # Definindo os parâmetros
-    num_records = 20
+    num_records = 3
     start_date = datetime(2024, 1, 1)
 
     path = 'produtos.csv'
@@ -13,7 +13,7 @@ def GeradorCSV ():
     # Gerando os dados
     data = []
     for i in range(num_records):
-        item_id = uuid.uuid4()
+        item_id = i + 1
         name = f"Item_{chr(65 + (i % 26))}"  # Gera nomes como Item A, Item B, etc.
         value = round(random.uniform(5.0, 20.0), 2)  # Gera valores aleatórios
         date = (start_date + timedelta(days=i)).strftime('%Y-%m-%d')  # Incrementa a data
