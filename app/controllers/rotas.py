@@ -1,28 +1,56 @@
+import pandas as pd
 from app import app
-from flask import request, jsonfy
+from flask import request, jsonify
+from app.service.data_base_functions import  CarregarTabela, ListarTodosProdutos ,ListarProduto 
+
+
 
 
 @app.route("/upload", methods = ["POST"])
-def upload():
-    if "file" not in request.files:
-        return jsonfy({"erro": "nao foi econtrado aquivo na requisicao"}), 400
-    
-    file = request.files["file"]
+def upload():  
+    """
+    Example endpoint returning a hello world message
+    ---
+    responses:
+      200:
+        description: A successful response
+    """
+    if len(request.files) == 0 :
+        return jsonify({"erro": "nao foi econtrado aquivo na requisicao"}), 400
+    # objeto (ImmutableMultiDict) pega o csv dentro desse obj
+    file = list(request.files.values())[0]
 
     if file.filename == "":
-        return jsonfy({"erro": "sem arquivo selecionado"}), 400
+        return jsonify({"erro": "sem arquivo selecionado"}), 400
     
     if not file.filename.endswith(".csv") :
-        return jsonfy({"erro": "arquivo nao é um csv"}), 400
+        return jsonify({"erro": "arquivo nao é um csv"}), 400
     
-    return file
+    df = pd.read_csv(file)
+    
+
+    return jsonify({"sucesso" : CarregarTabela(df)}), 200 
 
 
 @app.route("/data", methods = ["GET"])
 def pegar_todos():
-    return
+    """
+    Example endpoint returning a hello world message
+    ---
+    responses:
+      200:
+        description: A successful response
+    """
+    return ListarTodosProdutos() , 200 
 
 
 @app.route("/data/<id>", methods = ["GET"])
 def pegar_por_id(id):
-    return
+    """
+    Example endpoint returning a hello world message
+    ---
+    responses:
+      200:
+        description: A successful response
+    """
+    return ListarProduto(id), 200 

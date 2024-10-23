@@ -9,8 +9,8 @@ def GeradorDB():
     return conexao
 
 
-def CarregarTabela(conexao,df):
-   
+def CarregarTabela(df):
+    conexao = GeradorDB()
     # Criar a tabela a partir do DataFrame
     df.to_sql('temp_produtos', conexao, if_exists='replace', index=False)
     try:
@@ -55,7 +55,6 @@ def CarregarTabela(conexao,df):
     cursor.execute(query_insert)
     conexao.commit()
 
-
     query_update = f""" 
             UPDATE produtos
             SET 
@@ -67,27 +66,26 @@ def CarregarTabela(conexao,df):
     cursor = conexao.cursor()
     cursor.execute(query_update)
     conexao.commit()
-    
-
-
-
+    EncerraDB(conexao)
     return "tabela carregada"
 
 
 
-def ListarProduto(conexao, id):
+def ListarProduto(id):
+    conexao = GeradorDB()
     query = f"select * from produtos WHERE id = {id};"
     cursor = conexao.cursor()
     cursor.execute(query)
     registro = cursor.fetchall()
     # retornar um json ao inves de um objeto sqlite 
     colunas = [desc[0] for desc in cursor.description]
-    registro= [dict(zip(colunas, linha)) for linha in registro]
+    registro= [dict(zip(colunas, linha)) for linha in registro][0]
     registro = json.dumps(registro, indent=4)
-    
+    EncerraDB(conexao)
     return registro
     
-def ListarTodosProdutos(conexao):
+def ListarTodosProdutos():
+    conexao = GeradorDB()
     query = "select * from produtos;"
     cursor = conexao.cursor()
     cursor.execute(query)
@@ -96,6 +94,7 @@ def ListarTodosProdutos(conexao):
     colunas = [desc[0] for desc in cursor.description]
     registros= [dict(zip(colunas, linha)) for linha in registros]
     registros = json.dumps(registros, indent=4)
+    EncerraDB(conexao)
     return registros
 
 
