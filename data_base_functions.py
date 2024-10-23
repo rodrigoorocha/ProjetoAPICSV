@@ -33,22 +33,23 @@ def CarregarTabela(conexao,df):
         print("tabela produto ja existe")    
 
     query_insert = f""" 
-           INSERT INTO produtos
+          INSERT INTO produtos
             (
                 id,
                 name,
                 value,
                 date
             )
-                SELECT 
-                    DESTINO.id,
-                    DESTINO.name,
-                    DESTINO.value,
-                    DESTINO.date
-                FROM produtos AS DESTINO
-                LEFT JOIN temp_produtos AS ORIGEM ON
-                    ORIGEM.id = DESTINO.id
-                WHERE ORIGEM.id IS NULL;
+            SELECT 
+                temp_produtos.id,
+                temp_produtos.name,
+                temp_produtos.value,
+                temp_produtos.date
+            FROM temp_produtos 
+            LEFT JOIN produtos  ON
+                temp_produtos.id = produtos.id
+            WHERE produtos.id IS NULL;
+            
             """
     cursor = conexao.cursor()
     cursor.execute(query_insert)
