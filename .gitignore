@@ -27,7 +27,8 @@ MANIFEST
 Flask specific
 instance/
 *.sqlite
-*.db
+# *.db
+# *.csv
 
 PyInstaller
 Usually these files are written by a python script from a template
