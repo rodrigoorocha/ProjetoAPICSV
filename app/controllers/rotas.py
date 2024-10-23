@@ -9,11 +9,25 @@ from app.service.data_base_functions import  CarregarTabela, ListarTodosProdutos
 @app.route("/upload", methods = ["POST"])
 def upload():  
     """
-    Example endpoint returning a hello world message
+    Carrega um aquivo csv e insere no banco
     ---
+    consumes:
+      - multipart/form-data
+    tags:
+      - Registro  
+    parameters:
+      - name: file
+        in: formData
+        type: file
+        required: true
+        description: O arquivo csv para upload
     responses:
       200:
-        description: A successful response
+        description: File uploaded successfully with content displayed
+      400:
+        description: Invalid file type or upload error
+      500:
+        description: Internal server error
     """
     if len(request.files) == 0 :
         return jsonify({"erro": "nao foi econtrado aquivo na requisicao"}), 400
@@ -35,8 +49,10 @@ def upload():
 @app.route("/data", methods = ["GET"])
 def pegar_todos():
     """
-    Example endpoint returning a hello world message
+   Rota para buscar todos os Registro cadastrados
     ---
+    tags:
+      - Registro
     responses:
       200:
         description: A successful response
@@ -47,10 +63,21 @@ def pegar_todos():
 @app.route("/data/<id>", methods = ["GET"])
 def pegar_por_id(id):
     """
-    Example endpoint returning a hello world message
+    Rota para buscar Registro pelo ID
     ---
+    tags:
+      - Registro
+    parameters:
+      - name: id
+        in: path
+        type: string
+        required: True
+        description: ID do Registro que deseja buscar
     responses:
       200:
-        description: A successful response
+        description: Registro listado com sucesso
+      400:
+        description: Erro de requisição, o ID fornecido é inválido
     """
+    
     return ListarProduto(id), 200 
