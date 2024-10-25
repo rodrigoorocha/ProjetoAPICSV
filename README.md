@@ -10,15 +10,8 @@ Serão disponibilizados endpoints que permitam a consulta dos dados inseridos no
 
  1. Utilizar a versão Python 3.13
 
- 2. Recomendamos criação de um virtual environment conforme exemplo abaixo
 
-     `pip install -r requirements.txt`
-     `py -m venv venv`  
-     `.\venv\Scripts\activate`
- 
-
-
- 3.  os frameworks instalados seguem abaixo  
+ 2.  os frameworks instalados seguem abaixo  
   
      `Flask API`
 
@@ -29,9 +22,9 @@ Serão disponibilizados endpoints que permitam a consulta dos dados inseridos no
 # Instruções para rodar a aplicação
 
 1. ativar o virtual environment 
- `.\venv\Scripts\activate`
-
-
+  `pip install -r requirements.txt`
+  `source myEnv/Scripts/activate ` 
+   `run.py ` 
 
 # Estrutura do projeto 
 
