@@ -8,7 +8,7 @@ def GeradorCSV ():
     num_records = 1
     start_date = datetime(2024, 1, 1)
 
-    path = 'produtos.csv'
+    path = 'data.csv'
 
     # Gerando os dados
     data = []
